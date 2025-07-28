@@ -1,0 +1,6 @@
+@InfraConnect.Api_HostAddress = http://localhost:5202
+
+GET {{InfraConnect.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
