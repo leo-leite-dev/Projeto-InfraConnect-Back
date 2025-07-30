@@ -1,4 +1,3 @@
-using InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases;
 using InfraConnect.Domain.Entities.Commons;
 
 namespace InfraConnect.Domain.Entities.Cases

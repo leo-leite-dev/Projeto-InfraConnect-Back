@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InfraConnect.Infrastructure.Data.Configurations
 {
-    public class AddressConfiguration : IEntityTypeConfiguration<User>
+    public class AdressConfiguration : IEntityTypeConfiguration<UserProfile>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserProfile> builder)
         {
-            builder.OwnsOne(u => u.Address, address =>
+            builder.OwnsOne(p => p.Address, address =>
             {
                 address.Property(a => a.Street)
                     .HasColumnName("Street")

@@ -22,6 +22,76 @@ namespace InfraConnect.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CurrentResponsibleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ExternalAgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FinalResultSummary")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime?>("FinalizedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("RequestedExecutionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("CurrentResponsibleId");
+
+                    b.HasIndex("ExternalAgentId");
+
+                    b.ToTable("AgentCases", (string)null);
+                });
+
             modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseAttachment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -141,76 +211,6 @@ namespace InfraConnect.Infrastructure.Migrations
                     b.ToTable("AgentCaseSteps", (string)null);
                 });
 
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<Guid>("CreatedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CurrentResponsibleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("Deadline")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ExternalAgentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("FinalResultSummary")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateTime?>("FinalizedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("RequestedExecutionDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("CurrentResponsibleId");
-
-                    b.HasIndex("ExternalAgentId");
-
-                    b.ToTable("AgentCases", (string)null);
-                });
-
             modelBuilder.Entity("InfraConnect.Domain.Entities.Users.ExternalAgent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -235,6 +235,9 @@ namespace InfraConnect.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int>("ExternalRole")
+                        .HasColumnType("integer");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -255,19 +258,92 @@ namespace InfraConnect.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("ExternalAgents", (string)null);
                 });
 
             modelBuilder.Entity("InfraConnect.Domain.Entities.Users.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("\"Username\" IS NOT NULL");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Users.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,93 +360,35 @@ namespace InfraConnect.Infrastructure.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("character varying(14)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
                     b.Property<int>("DepartmentEnum")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
                     b.Property<int>("JobTitleEnum")
                         .HasColumnType("integer");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
                     b.Property<string>("ProfileImageUrl")
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("RG")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseAttachment", b =>
-                {
-                    b.HasOne("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
-                        .WithMany("Attachments")
-                        .HasForeignKey("AgentCaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AgentCase");
-                });
-
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseComment", b =>
-                {
-                    b.HasOne("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
-                        .WithMany("Comments")
-                        .HasForeignKey("AgentCaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AgentCase");
-                });
-
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseStep", b =>
-                {
-                    b.HasOne("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
-                        .WithMany("Steps")
-                        .HasForeignKey("AgentCaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AgentCase");
-                });
-
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", b =>
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCase", b =>
                 {
                     b.HasOne("InfraConnect.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
@@ -396,11 +414,55 @@ namespace InfraConnect.Infrastructure.Migrations
                     b.Navigation("ExternalAgent");
                 });
 
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseAttachment", b =>
+                {
+                    b.HasOne("InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
+                        .WithMany("Attachments")
+                        .HasForeignKey("AgentCaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentCase");
+                });
+
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseComment", b =>
+                {
+                    b.HasOne("InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
+                        .WithMany("Comments")
+                        .HasForeignKey("AgentCaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentCase");
+                });
+
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCaseStep", b =>
+                {
+                    b.HasOne("InfraConnect.Domain.Entities.Cases.AgentCase", "AgentCase")
+                        .WithMany("Steps")
+                        .HasForeignKey("AgentCaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentCase");
+                });
+
             modelBuilder.Entity("InfraConnect.Domain.Entities.Users.User", b =>
+                {
+                    b.HasOne("InfraConnect.Domain.Entities.Users.UserProfile", "Profile")
+                        .WithOne()
+                        .HasForeignKey("InfraConnect.Domain.Entities.Users.User", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Users.UserProfile", b =>
                 {
                     b.OwnsOne("InfraConnect.Domain.Entities.Users.Address", "Address", b1 =>
                         {
-                            b1.Property<Guid>("UserId")
+                            b1.Property<Guid>("UserProfileId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("City")
@@ -445,19 +507,19 @@ namespace InfraConnect.Infrastructure.Migrations
                                 .HasColumnType("character varying(10)")
                                 .HasColumnName("ZipCode");
 
-                            b1.HasKey("UserId");
+                            b1.HasKey("UserProfileId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("UserProfiles");
 
                             b1.WithOwner()
-                                .HasForeignKey("UserId");
+                                .HasForeignKey("UserProfileId");
                         });
 
                     b.Navigation("Address")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases.AgentCase", b =>
+            modelBuilder.Entity("InfraConnect.Domain.Entities.Cases.AgentCase", b =>
                 {
                     b.Navigation("Attachments");
 

@@ -38,7 +38,7 @@ namespace InfraConnect.Infrastructure.Data.Configurations
             builder.Property(e => e.AccessExpiresAt)
                 .IsRequired(false);
 
-            builder.Property(e => e.Role)
+            builder.Property(e => e.ExternalRole)
                 .HasConversion<int>()
                 .IsRequired();
 
@@ -47,6 +47,9 @@ namespace InfraConnect.Infrastructure.Data.Configurations
 
             builder.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            builder.HasIndex(e => e.Email).IsUnique();
+            builder.HasIndex(e => e.Username).IsUnique();
         }
     }
 }

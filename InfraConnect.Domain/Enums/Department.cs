@@ -2,12 +2,12 @@ namespace InfraConnect.Domain.Enums
 {
     public enum Department
     {
-        Regulation,
-        Operations,
-        Engineering,
-        Planning,
-        Maintenance,
-        Legal,
-        AccessControl
+        Regulation = 0,
+        Operations = 1,
+        Engineering = 2,
+        Planning = 3,
+        Maintenance = 4,
+        Legal = 5,
+        AccessControl = 6
     }
 }

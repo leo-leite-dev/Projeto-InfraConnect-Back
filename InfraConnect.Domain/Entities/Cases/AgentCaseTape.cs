@@ -1,4 +1,3 @@
-using InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases;
 using InfraConnect.Domain.Entities.Commons;
 using InfraConnect.Domain.Enums;
 

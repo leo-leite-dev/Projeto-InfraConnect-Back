@@ -1,30 +1,24 @@
-using InfraConnect.Domain.Entities.Commons;
 using InfraConnect.Domain.Enums;
+using InfraConnect.Domain.Exceptions;
 
 namespace InfraConnect.Domain.Entities.Users
 {
-    public class User : Base
+
+    public class User : UserBase
     {
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public string CPF { get; set; } = string.Empty;
-        public string? RG { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public string? Phone { get; set; }
+        public Guid ProfileId { get; private set; }
+        public UserProfile Profile { get; private set; } = null!;
+        public UserRole Role { get; private set; } = UserRole.Trainee;
 
-        public Address Address { get; set; } = new Address();
+        private User() { }
 
-        public Department DepartmentEnum { get; set; }
-        public JobTitle JobTitleEnum { get; set; }
-        public DateTime? AdmissionDate { get; set; }
+        public User(string email, string passwordHash, UserRole role, UserProfile profile, string? username = null)
+        {
+            Profile = profile ?? throw new UserException("Perfil do usuário é obrigatório.");
+            ProfileId = profile.Id;
+            Role = role;
 
-        public string? ProfileImageUrl { get; set; }
-
-        public UserRole Role { get; set; }
-        public bool IsActive { get; set; } = true;
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
+            InitializeBase(email, passwordHash, username);
+        }
     }
 }

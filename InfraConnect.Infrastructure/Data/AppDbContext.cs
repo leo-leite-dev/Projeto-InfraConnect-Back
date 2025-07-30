@@ -1,5 +1,4 @@
 using InfraConnect.Domain.Entities.Cases;
-using InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases;
 using InfraConnect.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 

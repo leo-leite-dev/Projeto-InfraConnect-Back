@@ -1,4 +1,4 @@
-using InfraConnect.Domain.Entities.Cases.InfraConnect.Domain.Entities.Cases;
+using InfraConnect.Domain.Entities.Cases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
