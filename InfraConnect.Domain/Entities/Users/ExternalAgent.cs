@@ -16,9 +16,8 @@ namespace InfraConnect.Domain.Entities.Users
 
         private ExternalAgent() { }
 
-        public ExternalAgent(string fullName, string email, string passwordHash,
-                             string company, string jobTitle, string? phone = null,
-                             DateTime? accessExpiresAt = null,
+        public ExternalAgent(string fullName, string email, string company, string jobTitle,
+                             string? phone = null, DateTime? accessExpiresAt = null,
                              UserExternalRole role = UserExternalRole.ExternalAgent,
                              string? username = null)
         {
@@ -38,7 +37,7 @@ namespace InfraConnect.Domain.Entities.Users
             AccessExpiresAt = accessExpiresAt;
             ExternalRole = role;
 
-            InitializeBase(email, passwordHash, username);
+            InitializeBase(email, username);
         }
     }
 }

@@ -66,13 +66,12 @@ namespace InfraConnect.Application.Services.Auths
 
                 var newUser = UserFactory.Create(
                     email: request.Email,
-                    passwordHash: string.Empty,
+                    rawPassword: request.Password,
                     role: request.Role,
                     profile: profile,
-                    username: request.Username
+                    username: request.Username,
+                    hashFunction: _passwordManager.Hash
                 );
-
-                newUser.SetPassword(request.Password, _passwordManager.Hash);
 
                 await _userRepository.AddAsync(newUser);
 
@@ -92,8 +91,8 @@ namespace InfraConnect.Application.Services.Auths
         }
 
         public async Task<Result<ExternalAgentResponse>> RegisterExternalAgentAsync(
-            RegisterExternalAgentRequest request,
-            string currentUserRole)
+      RegisterExternalAgentRequest request,
+      string currentUserRole)
         {
             if (!string.Equals(currentUserRole, UserRole.Admin.ToString(), StringComparison.OrdinalIgnoreCase))
                 return Result<ExternalAgentResponse>.Failure("Apenas administradores podem registrar novos agentes externos.");
@@ -111,16 +110,15 @@ namespace InfraConnect.Application.Services.Auths
                 var agent = ExternalAgentFactory.Create(
                     fullName: request.FullName,
                     email: request.Email,
-                    passwordHash: string.Empty, 
+                    rawPassword: request.Password,
                     company: request.Company,
                     jobTitle: request.JobTitle,
                     phone: request.Phone,
                     accessExpiresAt: request.AccessExpiresAt,
                     role: request.Role,
-                    username: request.Username
+                    username: request.Username,
+                    hashFunction: _passwordManager.Hash
                 );
-
-                agent.SetPassword(request.Password, _passwordManager.Hash);
 
                 await _externalAgentRepository.AddAsync(agent);
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfraConnect.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250730053850_NomeDaMigration")]
+    [Migration("20250730073230_NomeDaMigration")]
     partial class NomeDaMigration
     {
         /// <inheritdoc />

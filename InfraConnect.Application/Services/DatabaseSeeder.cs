@@ -35,7 +35,7 @@ namespace InfraConnect.Infrastructure.Services
 
             var profile = new UserProfile(
                 fullName: "Administrador Master",
-                cpf: "00000000000",
+                cpf: "11144477735",
                 department: Department.Regulation,
                 jobTitle: JobTitle.Manager,
                 address: new Address(
@@ -50,15 +50,16 @@ namespace InfraConnect.Infrastructure.Services
 
             await _userRepository.AddUserProfileAsync(profile);
 
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!");
-
+            // Cria o usuário sem passar hash de senha
             var admin = new User(
                 email: adminEmail,
-                passwordHash: passwordHash,
                 role: UserRole.Admin,
                 profile: profile,
                 username: "admin"
             );
+
+            // Define e valida a senha de forma explícita
+            admin.SetPassword("Admin123!", BCrypt.Net.BCrypt.HashPassword);
 
             await _userRepository.AddAsync(admin);
             _logger.LogInformation("Usuário administrador criado com sucesso.");

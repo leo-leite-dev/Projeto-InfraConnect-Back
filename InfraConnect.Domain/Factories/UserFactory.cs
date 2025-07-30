@@ -6,19 +6,22 @@ namespace InfraConnect.Domain.Factories
     public static class UserFactory
     {
         public static User Create(
-            string email,
-            string passwordHash,
+              string email,
+            string rawPassword,
             UserRole role,
             UserProfile profile,
-            string? username = null)
+            string? username,
+            Func<string, string> hashFunction)
         {
-            return new User(
+            var user = new User(
                 email: email,
-                passwordHash: passwordHash,
                 role: role,
                 profile: profile,
                 username: username
             );
+
+            user.SetPassword(rawPassword, hashFunction);
+            return user;
         }
     }
 }

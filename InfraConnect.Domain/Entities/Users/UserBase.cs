@@ -17,16 +17,12 @@ public abstract class UserBase : Base
 
     protected UserBase() { }
 
-    protected void InitializeBase(string email, string passwordHash, string? username = null)
+    protected void InitializeBase(string email, string? username = null)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new UserException("O e-mail é obrigatório.");
 
-        if (string.IsNullOrWhiteSpace(passwordHash) || passwordHash.Length < 20)
-            throw new UserException("Hash de senha inválido.");
-
         Email = EmailValidator.EnsureValid(email);
-        PasswordHash = passwordHash;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
 
@@ -103,18 +99,6 @@ public abstract class UserBase : Base
         PasswordHash = newPasswordHash;
         PasswordResetToken = null;
         PasswordResetTokenExpiresAt = null;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void Deactivate()
-    {
-        IsActive = false;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void Activate()
-    {
-        IsActive = true;
         UpdatedAt = DateTime.UtcNow;
     }
 }

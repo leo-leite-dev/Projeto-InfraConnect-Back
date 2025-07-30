@@ -8,18 +8,18 @@ namespace InfraConnect.Domain.Factories
         public static ExternalAgent Create(
             string fullName,
             string email,
-            string passwordHash,
+            string rawPassword,
             string company,
             string jobTitle,
-            string? phone = null,
-            DateTime? accessExpiresAt = null,
-            UserExternalRole role = UserExternalRole.ExternalAgent,
-            string? username = null)
+            string? phone,
+            DateTime? accessExpiresAt,
+            UserExternalRole role,
+            string? username,
+            Func<string, string> hashFunction)
         {
-            return new ExternalAgent(
+            var agent = new ExternalAgent(
                 fullName.Trim(),
                 email.Trim().ToLower(),
-                passwordHash,
                 company.Trim(),
                 jobTitle.Trim(),
                 phone?.Trim(),
@@ -27,6 +27,9 @@ namespace InfraConnect.Domain.Factories
                 role,
                 username?.Trim()
             );
+
+            agent.SetPassword(rawPassword, hashFunction);
+            return agent;
         }
     }
 }

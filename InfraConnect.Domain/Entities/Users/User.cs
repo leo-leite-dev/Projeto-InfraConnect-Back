@@ -12,13 +12,13 @@ namespace InfraConnect.Domain.Entities.Users
 
         private User() { }
 
-        public User(string email, string passwordHash, UserRole role, UserProfile profile, string? username = null)
+        public User(string email, UserRole role, UserProfile profile, string? username = null)
         {
             Profile = profile ?? throw new UserException("Perfil do usuário é obrigatório.");
             ProfileId = profile.Id;
             Role = role;
 
-            InitializeBase(email, passwordHash, username);
+            InitializeBase(email, username);
         }
     }
 }
