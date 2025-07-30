@@ -11,6 +11,7 @@ using InfraConnect.Domain.Entities.Users;
 using InfraConnect.Domain.Enums;
 using InfraConnect.Domain.Exceptions;
 using InfraConnect.Domain.Factories;
+using InfraConnect.Domain.Validators;
 using Microsoft.Extensions.Logging;
 
 namespace InfraConnect.Application.Services.Auths
@@ -59,21 +60,19 @@ namespace InfraConnect.Application.Services.Auths
                 if (await _userBaseRepository.ExistsByEmailAsync(request.Email))
                     return Result<UserResponse>.Failure("E-mail já está em uso.");
 
-                PasswordValidator.EnsureValid(request.Password);
-
-                var passwordHash = _passwordManager.Hash(request.Password);
-
                 request.Username = await GenerateUsernameIfEmptyAsync(request.Username);
 
                 var profile = _mapper.Map<UserProfile>(request);
 
                 var newUser = UserFactory.Create(
                     email: request.Email,
-                    passwordHash: passwordHash,
+                    passwordHash: string.Empty,
                     role: request.Role,
                     profile: profile,
                     username: request.Username
                 );
+
+                newUser.SetPassword(request.Password, _passwordManager.Hash);
 
                 await _userRepository.AddAsync(newUser);
 
@@ -107,17 +106,12 @@ namespace InfraConnect.Application.Services.Auths
                 if (await _userBaseRepository.ExistsByEmailAsync(request.Email))
                     return Result<ExternalAgentResponse>.Failure("E-mail já está em uso.");
 
-                PasswordValidator.EnsureValid(request.Password);
-
-                var passwordHash = _passwordManager.Hash(request.Password);
-                request.PasswordHash = passwordHash;
-
                 request.Username = await GenerateUsernameIfEmptyAsync(request.Username);
 
                 var agent = ExternalAgentFactory.Create(
                     fullName: request.FullName,
                     email: request.Email,
-                    passwordHash: passwordHash,
+                    passwordHash: string.Empty, 
                     company: request.Company,
                     jobTitle: request.JobTitle,
                     phone: request.Phone,
@@ -125,6 +119,8 @@ namespace InfraConnect.Application.Services.Auths
                     role: request.Role,
                     username: request.Username
                 );
+
+                agent.SetPassword(request.Password, _passwordManager.Hash);
 
                 await _externalAgentRepository.AddAsync(agent);
 

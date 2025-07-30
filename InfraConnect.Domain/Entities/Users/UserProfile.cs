@@ -1,22 +1,23 @@
 using InfraConnect.Domain.Entities.Commons;
 using InfraConnect.Domain.Enums;
 using InfraConnect.Domain.Exceptions;
+using InfraConnect.Domain.Validators;
 
 namespace InfraConnect.Domain.Entities.Users
 {
     public class UserProfile : Base
     {
-        public string FullName { get; private set; }
-        public string CPF { get; private set; }
-        public string? RG { get; protected set; }
+        public string FullName { get; private set; } = string.Empty;
+        public string CPF { get; private set; } = string.Empty;
+        public string? RG { get; private set; }
         public DateTime? BirthDate { get; private set; }
-        public string? Phone { get; protected set; }
+        public string? Phone { get; private set; }
 
-        public Address Address { get; protected set; }
+        public Address Address { get; private set; } = default!;
         public Department DepartmentEnum { get; private set; }
         public JobTitle JobTitleEnum { get; private set; }
         public DateTime? AdmissionDate { get; private set; }
-        public string? ProfileImageUrl { get; protected set; }
+        public string? ProfileImageUrl { get; private set; }
 
         private UserProfile() { }
 
@@ -35,9 +36,21 @@ namespace InfraConnect.Domain.Entities.Users
             if (string.IsNullOrWhiteSpace(fullName) || fullName.Length < 3 || fullName.Length > 200)
                 throw new UserException("O nome completo deve ter entre 3 e 200 caracteres.");
 
-            cpf = cpf.Trim().Replace(".", "").Replace("-", "");
-            if (string.IsNullOrWhiteSpace(cpf) || cpf.Length != 11)
-                throw new UserException("CPF inválido.");
+            cpf = CPFValidator.EnsureValid(cpf);
+
+            if (!string.IsNullOrWhiteSpace(rg))
+            {
+                rg = rg.Trim();
+                if (rg.Length < 5 || rg.Length > 20)
+                    throw new UserException("RG deve ter entre 5 e 20 caracteres.");
+                RG = rg;
+            }
+
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                PhoneValidator.Validate(phone);
+                Phone = phone.Trim();
+            }
 
             if (birthDate.HasValue)
             {
@@ -54,6 +67,8 @@ namespace InfraConnect.Domain.Entities.Users
 
                 if (age < 18)
                     throw new UserException("Usuário deve ter pelo menos 18 anos.");
+
+                BirthDate = birth;
             }
 
             if (admissionDate.HasValue && admissionDate.Value.Date > DateTime.UtcNow.Date)
@@ -61,23 +76,11 @@ namespace InfraConnect.Domain.Entities.Users
 
             FullName = fullName.Trim();
             CPF = cpf;
-            RG = rg?.Trim();
-            BirthDate = birthDate;
-            Phone = phone?.Trim();
             AdmissionDate = admissionDate;
             ProfileImageUrl = profileImageUrl?.Trim();
             DepartmentEnum = department;
             JobTitleEnum = jobTitle;
             Address = address ?? throw new UserException("Endereço é obrigatório.");
-        }
-
-        // (Opcional) Método auxiliar para exibir CPF formatado
-        public string GetFormattedCpf()
-        {
-            if (CPF.Length != 11)
-                return CPF;
-
-            return Convert.ToUInt64(CPF).ToString(@"000\.000\.000\-00");
         }
     }
 }

@@ -1,5 +1,6 @@
 using InfraConnect.Domain.Entities.Commons;
 using InfraConnect.Domain.Exceptions;
+using InfraConnect.Domain.Validators;
 
 public abstract class UserBase : Base
 {
@@ -24,7 +25,7 @@ public abstract class UserBase : Base
         if (string.IsNullOrWhiteSpace(passwordHash) || passwordHash.Length < 20)
             throw new UserException("Hash de senha inválido.");
 
-        Email = email.Trim().ToLower();
+        Email = EmailValidator.EnsureValid(email);
         PasswordHash = passwordHash;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
@@ -53,12 +54,12 @@ public abstract class UserBase : Base
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void SetPassword(string hashedPassword)
+    public void SetPassword(string rawPassword, Func<string, string> hashFunction)
     {
-        if (string.IsNullOrWhiteSpace(hashedPassword))
-            throw new UserException("A senha não pode ser vazia.");
+        PasswordValidator.EnsureValid(rawPassword);
 
-        PasswordHash = hashedPassword;
+        PasswordHash = hashFunction.Invoke(rawPassword);
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void ChangePassword(string currentPasswordHash, string newPasswordHash)
