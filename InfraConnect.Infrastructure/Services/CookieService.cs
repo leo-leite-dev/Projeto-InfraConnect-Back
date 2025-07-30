@@ -2,7 +2,7 @@ using InfraConnect.Application.IServices.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 
-namespace InfraConnect.Infrastructure.Services.Auth
+namespace InfraConnect.Infrastructure.Services
 {
     public class CookieService : ICookieService
     {

@@ -6,7 +6,7 @@ using InfraConnect.Domain.Entities.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace InfraConnect.Infrastructure.Services.Auth
+namespace InfraConnect.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {

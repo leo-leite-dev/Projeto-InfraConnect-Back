@@ -2,12 +2,13 @@ using GameNewsBoard.Application.IServices.Auth;
 using InfraConnect.Application.IRepositories;
 using InfraConnect.Application.IServices;
 using InfraConnect.Application.IServices.Auth;
+using InfraConnect.Application.IServices.Auths;
 using InfraConnect.Application.IServices.IAuths;
+using InfraConnect.Application.Services.Auth;
 using InfraConnect.Application.Services.Auths;
 using InfraConnect.Infrastructure.Data;
 using InfraConnect.Infrastructure.Repositories;
 using InfraConnect.Infrastructure.Services;
-using InfraConnect.Infrastructure.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,9 @@ namespace InfraConnect.Configurations.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             services.AddScoped<IPasswordManager, PasswordManager>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

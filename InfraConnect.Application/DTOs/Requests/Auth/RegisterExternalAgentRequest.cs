@@ -1,7 +1,7 @@
+using InfraConnect.Domain.Enums;
+
 namespace InfraConnect.Application.DTOs.Requests.Auth
 {
-    using InfraConnect.Domain.Enums;
-
     public class RegisterExternalAgentRequest
     {
         public string FullName { get; set; } = string.Empty;

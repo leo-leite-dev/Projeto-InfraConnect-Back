@@ -11,7 +11,6 @@ using InfraConnect.Domain.Entities.Users;
 using InfraConnect.Domain.Enums;
 using InfraConnect.Domain.Exceptions;
 using InfraConnect.Domain.Factories;
-using InfraConnect.Domain.Validators;
 using Microsoft.Extensions.Logging;
 
 namespace InfraConnect.Application.Services.Auths
@@ -90,9 +89,7 @@ namespace InfraConnect.Application.Services.Auths
             }
         }
 
-        public async Task<Result<ExternalAgentResponse>> RegisterExternalAgentAsync(
-      RegisterExternalAgentRequest request,
-      string currentUserRole)
+        public async Task<Result<ExternalAgentResponse>> RegisterExternalAgentAsync(RegisterExternalAgentRequest request, string currentUserRole)
         {
             if (!string.Equals(currentUserRole, UserRole.Admin.ToString(), StringComparison.OrdinalIgnoreCase))
                 return Result<ExternalAgentResponse>.Failure("Apenas administradores podem registrar novos agentes externos.");

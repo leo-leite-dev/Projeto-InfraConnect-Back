@@ -58,21 +58,19 @@ public abstract class UserBase : Base
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void ChangePassword(string currentPasswordHash, string newPasswordHash)
+    public void ChangePassword(string currentRawPassword, string newRawPassword, Func<string, bool> verifyPassword, Func<string, string> hashFunction)
     {
-        if (string.IsNullOrWhiteSpace(newPasswordHash))
-            throw new UserException("A nova senha não pode estar vazia.");
-
-        if (newPasswordHash.Length < 8)
-            throw new UserException("A nova senha deve conter no mínimo 8 caracteres.");
-
-        if (PasswordHash != currentPasswordHash)
+        if (!verifyPassword.Invoke(currentRawPassword))
             throw new UserException("A senha atual está incorreta.");
 
-        if (PasswordHash == newPasswordHash)
+        PasswordValidator.EnsureValid(newRawPassword);
+
+        var newHash = hashFunction.Invoke(newRawPassword);
+
+        if (newHash == PasswordHash)
             throw new UserException("A nova senha deve ser diferente da senha atual.");
 
-        PasswordHash = newPasswordHash;
+        PasswordHash = newHash;
         UpdatedAt = DateTime.UtcNow;
     }
 

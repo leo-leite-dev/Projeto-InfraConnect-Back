@@ -17,6 +17,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // =================== INFRASTRUCTURE SERVICES ===================
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
+builder.Services.AddScoped(typeof(InfraConnect.Application.Commons.IAppLogger<>), typeof(InfraConnect.Infrastructure.Logging.AppLogger<>));
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
 // =================== JWT CONFIG ===================
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];

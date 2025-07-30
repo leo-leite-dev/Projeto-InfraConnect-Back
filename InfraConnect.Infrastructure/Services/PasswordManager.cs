@@ -1,9 +1,17 @@
 using InfraConnect.Application.IServices;
 
-public class PasswordManager : IPasswordManager
+namespace InfraConnect.Infrastructure.Services
 {
-    public string Hash(string plainPassword)
+    public class PasswordManager : IPasswordManager
     {
-        return BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        public string Hash(string plainPassword)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        }
+
+        public bool Verify(string rawPassword, string passwordHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(rawPassword, passwordHash);
+        }
     }
 }
